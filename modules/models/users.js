@@ -13,32 +13,72 @@ const createdb = require('../auth/createdb.js');
 //   birthday: DataTypes.DATE
 // }, { sequelize, modelName: 'user' });
 
-// const User = sequelize.define('User', {
-//     // Model attributes are defined here
-//     firstName: {
-//       type: DataTypes.STRING,
-//       allowNull: false
-//     },
-//     lastName: {
-//       type: DataTypes.STRING
-//       // allowNull defaults to true
-//     }
-//   }, {
-//     // Other model options go here
-//   });
-  
+const User = sequelize.define('users', {
+    // Model attributes are defined here
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING
+      // allowNull defaults to true
+    },
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      contact: DataTypes.INTEGER,
+      // createdBy: DataTypes.STRING,
+      // updatedBy: DataTypes.STRING,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,    
+  }, {
+    // Other model options go here
+  });
+
+
+  // const User = sequelize.define('User', {
+  //   // Model attributes are defined here
+  //   firstName: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false
+  //   },
+  //   lastName: {
+  //     type: DataTypes.STRING
+  //     // allowNull defaults to true
+  //   }
+  // }, {
+  //   // Other model options go here
+  // });
+
 // // `sequelize.define` also returns the model
 // console.log(User === sequelize.models.User); // true
 
-const User = sequelize.define("user", {
-    name: DataTypes.TEXT,
-    favoriteColor: {
-      type: DataTypes.TEXT,
-      defaultValue: 'green'
-    },
-    age: DataTypes.INTEGER,
-    cash: DataTypes.INTEGER
-  });
+// const User = sequelize.define("users", {
+//   name: DataTypes.STRING,
+//   email: DataTypes.STRING,
+//   password: DataTypes.STRING,
+//   contact: DataTypes.NUMBER,
+//   createdBy: DataTypes.STRING,
+//   updatedBy: DataTypes.STRING,
+//   createdAt: DataTypes.DATE,
+//   updatedAt: DataTypes.DATE,
+//   // age: DataTypes.INTEGER,
+//   // cash: DataTypes.INTEGER
+//   // favoriteColor: {
+//   //   type: DataTypes.TEXT,
+//   //   defaultValue: 'green'
+//   // },
+// });
+
+
+// const User = sequelize.define("user", {
+//     name: DataTypes.TEXT,
+//     favoriteColor: {
+//       type: DataTypes.TEXT,
+//       defaultValue: 'green'
+//     },
+//     age: DataTypes.INTEGER,
+//     cash: DataTypes.INTEGER
+//   });
   
   (async () => {
     await sequelize.sync({ force: true });
@@ -71,3 +111,4 @@ const Data = sequelize.define("data", {
 // })();
 
 module.exports = User;
+//  module.exports = Data;
