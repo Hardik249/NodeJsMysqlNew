@@ -15,14 +15,14 @@ const createdb = require('../auth/createdb.js');
 
 const User = sequelize.define('users', {
     // Model attributes are defined here
-    firstName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    lastName: {
-      type: DataTypes.STRING
-      // allowNull defaults to true
-    },
+    // lastName: {
+    //   type: DataTypes.STRING
+    //   // allowNull defaults to true
+    // },
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       contact: DataTypes.INTEGER,
@@ -34,6 +34,19 @@ const User = sequelize.define('users', {
     // Other model options go here
   });
 
+
+// class User extends Model {}
+// User.init({
+//     name: {
+//       type: DataTypes.STRING,
+//       allowNull: false
+//     },
+//     email: DataTypes.STRING,
+//     password: DataTypes.STRING,
+//     contact: DataTypes.INTEGER,
+//       createdAt: DataTypes.DATE,
+//       updatedAt: DataTypes.DATE,    
+// }, { sequelize, modelName: 'user' });
 
   // const User = sequelize.define('User', {
   //   // Model attributes are defined here
@@ -80,10 +93,6 @@ const User = sequelize.define('users', {
 //     cash: DataTypes.INTEGER
 //   });
   
-  (async () => {
-    await sequelize.sync({ force: true });
-    // Code here
-  })();
 
 const Data = sequelize.define("data", {
     name: DataTypes.TEXT,
@@ -95,6 +104,11 @@ const Data = sequelize.define("data", {
     cash: DataTypes.INTEGER
   });
   
+  (async () => {
+    await sequelize.sync({ force: false });
+    // Code here
+  })();
+
 //   (async () => {
 //     await sequelize.sync({ force: true });
 //     // Code here
