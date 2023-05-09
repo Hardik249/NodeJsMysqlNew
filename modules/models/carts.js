@@ -24,10 +24,10 @@ const Cart = sequelize.define('add_to_cart', {
   }, {
     // Other model options go here
     sequelize,
-    paranoid: true,
+    // paranoid: true,
 
     // If you want to give a custom name to the deletedAt column
-    deletedAt: 'destroyTime'
+    // deletedAt: 'destroyTime'
 });
 
 module.exports = Cart;

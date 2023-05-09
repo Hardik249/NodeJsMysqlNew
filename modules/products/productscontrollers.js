@@ -1,7 +1,7 @@
 console.log('productscontroller');
 const express = require('express');
 const productscontrollers = express();
-
+const { Op } = require("sequelize");
 // const users = require('../models/users.js');
 const Product = require('../models/products.js');
 
@@ -15,12 +15,32 @@ const Product = require('../models/products.js');
 exports.products = async (req, res) => {
     try {
         // let products = await Product.findAll({});
-        let products = await Product.findOne({
+
+        // let products = await Product.findOne({
+        //   where: {
+        //     // authorId: 2
+        //     id: req.params.id
+        //   }
+        // });
+        // console.log('req', req.query.array)
+        console.log('req', JSON.parse(req.query.array))
+        let products = await Product.findAll({
           where: {
             // authorId: 2
-            product_id: req.params.product_id
+            id: {
+                // [Op.eq]: req.params.id
+                // [Op.eq]: req.query.array
+                // [Op.in]: req.query.array
+                // [Op.eq]: JSON.parse(req.query.array)
+                [Op.in]: JSON.parse(req.query.array)
+                // [Op.eq]: req.query.array.split(',')
+                // [Op.in]: JSON.parse(req.query.array.split(','))
+                // [req.params.id]
+            }
           }
         });
+        // SELECT * FROM post WHERE authorId = 2;
+
         // console.log(products)
         res.status(200).json({
             status : "success products",

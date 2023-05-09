@@ -1,6 +1,7 @@
 console.log('cartscontroller');
 const express = require('express');
 const cartscontrollers = express();
+const { Op } = require("sequelize");
 
 // const users = require('../models/users.js');
 const Cart = require('../models/carts.js');
@@ -60,22 +61,52 @@ exports.addtocart = async (req, res) => {
 
 exports.removefromcart = async (req, res) => {
     try {
-        let addtocart = await Cart.findOne({}, {
+        console.log('req', req.params.product_id)
+        // console.log('req', req.query.array)
+        // console.log('req', JSON.parse(req.query.array))
+        // let addtocart = await Cart.destroy({
+        //   where: {
+        //     // authorId: 2
+        //     product_id: {
+        //         // [Op.eq]: req.params.id
+        //         // [Op.eq]: req.query.array
+        //         [Op.in]: req.query.array
+        //         // [Op.eq]: JSON.parse(req.query.array)
+        //         // [Op.in]: JSON.parse(req.query.array)
+        //         // [Op.eq]: req.query.array.split(',')
+        //         // [Op.in]: JSON.parse(req.query.array.split(','))
+        //         // [req.params.id]
+        //     }
+        //   }
+        // });
+        let addtocart = await Cart.destroy({
           where: {
-            user_id: req.params.user_id
+            // authorId: 2
+            product_id: req.params.product_id
           }
         });
-        let addedtocart = await addtocart.destroy({
-          where: {
-            user_id: req.params.user_id
-          }
-        });
+        console.log('r', addtocart)
+        // let addtocart = await Cart.findOne({}, {
+        //   where: {
+        //     // user_id: req.params.user_id
+        //     product_id: req.params.product_id
+        //   }
+        // });
+        // console.log('f', addtocart)
+        // let addedtocart = await addtocart.destroy({
+        //   where: {
+        //     // user_id: req.params.user_id
+        //     product_id: req.params.product_id
+        //   }
+        // });
+        // console.log('d', addtocart)
         res.status(200).json({
-            status : "success post addtocart try",
-            message : "Test post api addtocart try",
-            data: addedtocart,
+            status : "success destroy addtocart try",
+            message : "Test destroy api addtocart try",
+            data: addtocart,
         });
     } catch (error) {
+        console.error(error)
         res.status(200).json({
             status : "fail post addtocart catch",
             message : "Test post api addtocart catch",
