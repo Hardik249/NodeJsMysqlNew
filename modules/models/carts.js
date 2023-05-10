@@ -19,8 +19,9 @@ const Cart = sequelize.define('add_to_cart', {
       allowNull: false,
       required: true,
     },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,    
+    quantity: DataTypes.INTEGER,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,    
   }, {
     // Other model options go here
     sequelize,
@@ -29,5 +30,9 @@ const Cart = sequelize.define('add_to_cart', {
     // If you want to give a custom name to the deletedAt column
     // deletedAt: 'destroyTime'
 });
+
+// This will run .sync() only if database name ends with '_test'
+// sequelize.sync({ force: true, match: /_test$/ });
+// sequelize.sync({ alter: true });
 
 module.exports = Cart;

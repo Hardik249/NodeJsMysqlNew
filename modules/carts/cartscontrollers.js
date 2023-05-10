@@ -42,6 +42,7 @@ exports.addtocart = async (req, res) => {
             user_id: req.body.user_id,
             createdAt: Date.now(),
             updatedAt: null,
+            quantity: req.body.quantity,
         });
         let addedtocart = await addtocart.save();
         res.status(200).json({
@@ -58,6 +59,49 @@ exports.addtocart = async (req, res) => {
         });
     }
 };
+
+exports.updatequantity = async (req, res) => {
+    try {
+        // console.log('req.body.quantity', req.body.quantity)
+        // console.log('req.params.product_id', req.params.product_id)
+        let updatequantity = await Cart.update({
+            // product_id: req.body.product_id,
+            // user_id: req.body.user_id,
+            // createdAt: Date.now(),
+            // updatedAt: null,
+            // createdAt: null,
+            updatedAt: Date.now(),
+            quantity: req.body.quantity,
+            }, {
+              where: {
+                // lastName: null
+                product_id: req.params.product_id
+            }
+        });
+        let updatedquantity = await Cart.findOne({
+          where: {
+            // authorId: 2
+            product_id: req.params.product_id
+          }
+        });
+        // console.log(updatequantity)
+        // let addedtocart = await addtocart.save();
+        res.status(200).json({
+            status : "success post updatequantity addtocart try",
+            message : "Test post api updatequantity addtocart try",
+            data: updatedquantity,
+        });
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail post addtocart catch",
+            message : "Test post api addtocart catch",
+            data: error.errors,
+            // data: error.errors.map((item)=>item.message),
+        });
+    }
+};
+
 
 exports.removefromcart = async (req, res) => {
     try {
