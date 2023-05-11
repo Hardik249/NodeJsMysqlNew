@@ -22,17 +22,21 @@ exports.products = async (req, res) => {
         //     id: req.params.id
         //   }
         // });
-        // console.log('req', req.query.array)
-        console.log('req', JSON.parse(req.query.array))
+        // console.log('reqp', req.params.array)
+        console.log('req', req.query.array)
+        console.log('reqj', JSON.parse(req.query.array))
         let products = await Product.findAll({
           where: {
             // authorId: 2
+            // id: req.params.id
             id: {
                 // [Op.eq]: req.params.id
                 // [Op.eq]: req.query.array
                 // [Op.in]: req.query.array
                 // [Op.eq]: JSON.parse(req.query.array)
+
                 [Op.in]: JSON.parse(req.query.array)
+                
                 // [Op.eq]: req.query.array.split(',')
                 // [Op.in]: JSON.parse(req.query.array.split(','))
                 // [req.params.id]

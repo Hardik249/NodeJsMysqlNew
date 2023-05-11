@@ -5,6 +5,7 @@ const { Op } = require("sequelize");
 
 // const users = require('../models/users.js');
 const Cart = require('../models/carts.js');
+const Product = require('../models/products.js');
 
 // userscontrollers.get('/users', (req, res) => {
 //     res.status(200).json({
@@ -16,17 +17,34 @@ const Cart = require('../models/carts.js');
 exports.carts = async (req, res) => {
     try {
         // let addtocart = await Cart.findAll({});
-        let addtocart = await Cart.findAll({
-          where: {
-            // authorId: 2
-          }
-        });
+        // let addtocart = await Cart.findAll({
+        //   where: {
+        //     // authorId: 2
+        //   }
+        // });
+
+        // let addtocart = await Cart.findAll({});
+        // const addtocart = await Cart.findAll({ include: [{model: Product, as: 'products'}] });
+        const addtocart = await Cart.findAll({ include: [{model: Product, as: 'products'}] });
+        // const addtocart = await Cart.findAll({ include: Product });
+        // const addtocart = await Cart.findAll({ include: [{model: Product}] });
+
+        console.log(JSON.stringify(addtocart, null, 2));
+
+        // const [addtocart, metadata] = await sequelize.query(
+        //     // "SELECT `id`, `product_id`, `user_id`, `quantity`, `createdAt`, `updatedAt` FROM `add_to_carts` AS `add_to_cart`"
+        //     "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`user_id`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt`, `products`.`addToCartId` AS `products.addToCartId` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`id` = `products`.`addToCartId`"
+        //   // "SELECT * FROM Invoices JOIN Users ON Invoices.userId = Users.id"
+        // );
+        // console.log(JSON.stringify(addtocart, null, 2));
+
         res.status(200).json({
             status : "success carts",
             message : "Test api carts",
             data: addtocart
         }); 
     } catch (error) {
+        console.error(error)
         res.status(200).json({
             status : "fail carts",
             message : "Test api carts",
