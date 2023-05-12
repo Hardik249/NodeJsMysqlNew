@@ -7,7 +7,7 @@ const cartscontrollers = require('./cartscontrollers.js');
 // usersroutes.get('/users', userscontrollers);
 cartsroutes.get('/viewcarts', cartscontrollers.carts);
 cartsroutes.post('/addtocart', cartscontrollers.addtocart);
-cartsroutes.put('/updatequantity/:product_id', cartscontrollers.updatequantity);
-cartsroutes.delete('/removefromcart/:product_id', cartscontrollers.removefromcart);
+cartsroutes.put('/updatequantity/:productId', cartscontrollers.updatequantity);
+cartsroutes.delete('/removefromcart/:productId', cartscontrollers.removefromcart);
 
 module.exports = cartsroutes;

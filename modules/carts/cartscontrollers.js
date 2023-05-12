@@ -2,6 +2,9 @@ console.log('cartscontroller');
 const express = require('express');
 const cartscontrollers = express();
 const { Op } = require("sequelize");
+const con = require('../auth/conn.js');
+const Sequelize = con.Sequelize;
+const sequelize = con.sequelize;
 
 // const users = require('../models/users.js');
 const Cart = require('../models/carts.js');
@@ -23,20 +26,14 @@ exports.carts = async (req, res) => {
         //   }
         // });
 
-        // let addtocart = await Cart.findAll({});
+
         // const addtocart = await Cart.findAll({ include: [{model: Product, as: 'products'}] });
-        const addtocart = await Cart.findAll({ include: [{model: Product, as: 'products'}] });
-        // const addtocart = await Cart.findAll({ include: Product });
-        // const addtocart = await Cart.findAll({ include: [{model: Product}] });
-
-        console.log(JSON.stringify(addtocart, null, 2));
-
-        // const [addtocart, metadata] = await sequelize.query(
-        //     // "SELECT `id`, `product_id`, `user_id`, `quantity`, `createdAt`, `updatedAt` FROM `add_to_carts` AS `add_to_cart`"
-        //     "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`user_id`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt`, `products`.`addToCartId` AS `products.addToCartId` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`id` = `products`.`addToCartId`"
-        //   // "SELECT * FROM Invoices JOIN Users ON Invoices.userId = Users.id"
-        // );
+        /*const [addtocart, metadata] = await sequelize.query(
+          "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`user_id`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`product_id` = `products`.`id`"
+        );*/
+        const addtocart = await Cart.findAll({ include: Product });
         // console.log(JSON.stringify(addtocart, null, 2));
+
 
         res.status(200).json({
             status : "success carts",
@@ -56,17 +53,35 @@ exports.carts = async (req, res) => {
 exports.addtocart = async (req, res) => {
     try {
         let addtocart = await Cart.create({
-            product_id: req.body.product_id,
+            productId: req.body.productId,
             user_id: req.body.user_id,
             createdAt: Date.now(),
             updatedAt: null,
             quantity: req.body.quantity,
         });
         let addedtocart = await addtocart.save();
+        // const productAddtocart = await Cart.findAll({ include: Product });
+        // const productAddtocart = await Cart.findOne({
+        //   include: {
+        //     model: Product,
+        //     through: {
+        //       attributes: []
+        //     }
+        //   }
+        // });
+        const productAddtocart = await Cart.findOne({
+          include: {
+            model: Product,
+            // through: {
+            //   attributes: []
+            // }
+          }
+        });
+        // console.log(addedtocart)
         res.status(200).json({
             status : "success post addtocart try",
             message : "Test post api addtocart try",
-            data: addtocart,
+            data: addedtocart, productAddtocart,
         });
     } catch (error) {
         res.status(200).json({
@@ -93,13 +108,13 @@ exports.updatequantity = async (req, res) => {
             }, {
               where: {
                 // lastName: null
-                product_id: req.params.product_id
+                productId: req.params.productId
             }
         });
         let updatedquantity = await Cart.findOne({
           where: {
             // authorId: 2
-            product_id: req.params.product_id
+            productId: req.params.productId
           }
         });
         // console.log(updatequantity)
@@ -123,13 +138,13 @@ exports.updatequantity = async (req, res) => {
 
 exports.removefromcart = async (req, res) => {
     try {
-        console.log('req', req.params.product_id)
+        console.log('req', req.params.productId)
         // console.log('req', req.query.array)
         // console.log('req', JSON.parse(req.query.array))
         // let addtocart = await Cart.destroy({
         //   where: {
         //     // authorId: 2
-        //     product_id: {
+        //     productId: {
         //         // [Op.eq]: req.params.id
         //         // [Op.eq]: req.query.array
         //         [Op.in]: req.query.array
@@ -144,7 +159,7 @@ exports.removefromcart = async (req, res) => {
         let addtocart = await Cart.destroy({
           where: {
             // authorId: 2
-            product_id: req.params.product_id
+            productId: req.params.productId
           }
         });
         console.log('r', addtocart)

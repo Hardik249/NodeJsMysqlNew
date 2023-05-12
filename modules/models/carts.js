@@ -9,7 +9,7 @@ const Product = require('./products.js');
 
 const Cart = sequelize.define('add_to_cart', {
     // Model attributes are defined here
-    product_id: {
+    productId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       required: true,
@@ -37,35 +37,17 @@ const Cart = sequelize.define('add_to_cart', {
     // deletedAt: 'destroyTime'
 });
 
-Cart.hasOne(Product, {
-  foreignKey: 'id',
-  key: 'product_id',
-  as: 'products'
-})
+
+Product.hasOne(Cart);
+Cart.belongsTo(Product);
+
+Cart.sync();
 
 
 
 
-Product.belongsTo(Cart, {
-  foreignKey: 'product_id',
-  key: 'id',
-  as: 'products'
-})
 
-// Cart.hasMany(Product)
 
-// Product.hasOne(Cart, {
-//   foreignKey: 'product_id'
-// })
-// Product.belongsTo(Cart)
-
-// Cart.hasMany(Product, {
-//   key: 'id',
-//   as: 'products'
-// });
-// Product.belongsTo(Cart, {
-//   foreignKey: 'product_id'
-// });
 
 
 // This will run .sync() only if database name ends with '_test'

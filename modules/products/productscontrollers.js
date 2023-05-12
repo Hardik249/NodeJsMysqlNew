@@ -52,6 +52,7 @@ exports.products = async (req, res) => {
             data: products
         }); 
     } catch (error) {
+        console.error(error);
         res.status(200).json({
             status : "fail products",
             message : "Test api products",
