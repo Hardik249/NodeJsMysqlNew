@@ -61,6 +61,59 @@ exports.products = async (req, res) => {
     }
 };
 
+
+exports.product = async (req, res) => {
+    try {
+        // let products = await Product.findAll({});
+
+        let product = await Product.findOne({
+          where: {
+            // authorId: 2
+            id: req.params.id
+          }
+        });
+        // console.log('reqp', req.params.array)
+
+        // console.log('req', req.query.array)
+        // console.log('reqj', JSON.parse(req.query.array))
+
+        // let products = await Product.findAll({
+        //   where: {
+        //     // authorId: 2
+        //     // id: req.params.id
+        //     id: {
+        //         // [Op.eq]: req.params.id
+        //         // [Op.eq]: req.query.array
+        //         // [Op.in]: req.query.array
+        //         // [Op.eq]: JSON.parse(req.query.array)
+
+        //         [Op.in]: JSON.parse(req.query.array)
+
+        //         // [Op.eq]: req.query.array.split(',')
+        //         // [Op.in]: JSON.parse(req.query.array.split(','))
+        //         // [req.params.id]
+        //     }
+        //   }
+        // });
+        // SELECT * FROM post WHERE authorId = 2;
+
+        // console.log(product)
+        res.status(200).json({
+            status : "success products",
+            message : "Test api products",
+            data: product
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(200).json({
+            status : "fail products",
+            message : "Test api products",
+            data: error
+        });
+    }
+};
+
+
 // exports.signup = async (req, res) => {
 //     try {
 //         let user = await User.create({
