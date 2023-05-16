@@ -231,7 +231,8 @@ exports.removefromcart = async (req, res) => {
         let addtocart = await Cart.destroy({
           where: {
             // authorId: 2
-            productId: req.params.productId
+            // productId: req.params.productId
+            id: req.params.id
           }
         });
         console.log('r', addtocart)

@@ -9,6 +9,6 @@ cartsroutes.get('/viewcarts', cartscontrollers.carts);
 cartsroutes.get('/viewcarts/:user_id', cartscontrollers.cartsByUser);
 cartsroutes.post('/addtocart/:user_id', cartscontrollers.addtocart);
 cartsroutes.put('/updatequantity/:productId', cartscontrollers.updatequantity);
-cartsroutes.delete('/removefromcart/:productId', cartscontrollers.removefromcart);
+cartsroutes.delete('/removefromcart/:id', cartscontrollers.removefromcart);
 
 module.exports = cartsroutes;
