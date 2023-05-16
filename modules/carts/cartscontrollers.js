@@ -108,6 +108,30 @@ exports.addtocart = async (req, res) => {
             quantity: req.body.quantity,
         });
         let addedtocart = await addtocart.save();
+
+        // const productAddedtocart = await Cart.findAll({
+        //     include: {
+        //         model: Product,
+        //         // through: {
+        //         //   attributes: []
+        //         // }
+        //     },
+        //     where: {
+        //         user_id: req.params.user_id
+        //     }
+        // });
+        // console.log(req.body.productId);
+        // let cartProducts = [];
+        // productAddedtocart.forEach(function(key, value) {
+        //     cartProducts.push(key.productId)
+        // })
+        // console.log(cartProducts);
+        // if (cartProducts.includes(req.body.productId)) {
+        //     console.log('if')
+        // } else {
+        //     console.log('else')
+        // }
+
         // const productAddtocart = await Cart.findAll({ include: Product });
         // const productAddtocart = await Cart.findOne({
         //   include: {
