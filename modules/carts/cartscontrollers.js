@@ -109,6 +109,34 @@ exports.addtocart = async (req, res) => {
         });
         let addedtocart = await addtocart.save();
 
+        // let productAddtocart = await Product.findOne({
+        //   where: {
+        //     // authorId: 2
+        //     // id: req.params.id
+        //     id: req.body.productId
+        //   }
+        // });
+
+
+        const productAddedtocart = await Cart.findOne({ include: Product,
+            where: {
+              user_id: {
+                [Op.eq]: req.params.user_id
+              },
+              productId: {
+                [Op.eq]: req.body.productId
+              }
+            }
+        });
+
+        let item = {
+            'price':productAddedtocart.product.price,
+            'quantity':productAddedtocart.quantity
+        }
+        console.log(item)
+        // console.log(productAddedtocart.quantity)
+        // console.log(productAddedtocart.product.price)
+
         // const productAddedtocart = await Cart.findAll({
         //     include: {
         //         model: Product,
@@ -141,19 +169,22 @@ exports.addtocart = async (req, res) => {
         //     }
         //   }
         // });
-        const productAddtocart = await Cart.findOne({
-          include: {
-            model: Product,
-            // through: {
-            //   attributes: []
-            // }
-          }
-        });
+
+        // const productAddtocart = await Cart.findOne({
+        //   include: {
+        //     model: Product,
+        //     // through: {
+        //     //   attributes: []
+        //     // }
+        //   }
+        // });
         // console.log(addedtocart)
+
+        // console.log(productAddedtocart)
         res.status(200).json({
             status : "success post addtocart try",
             message : "Test post api addtocart try",
-            data: addedtocart, productAddtocart,
+            data: productAddedtocart, item,
         });
     } catch (error) {
         res.status(200).json({

@@ -72,6 +72,10 @@ exports.product = async (req, res) => {
             id: req.params.id
           }
         });
+        // console.log(product)
+        // let images = new Array();
+        let images = [product.images0, product.images1, product.images2, product.images3, product.images4, product.images5];
+
         // console.log('reqp', req.params.array)
 
         // console.log('req', req.query.array)
@@ -97,11 +101,11 @@ exports.product = async (req, res) => {
         // });
         // SELECT * FROM post WHERE authorId = 2;
 
-        // console.log(product)
+        // console.log(images)
         res.status(200).json({
             status : "success products",
             message : "Test api products",
-            data: product
+            data: product, images
         });
     } catch (error) {
         console.error(error);
