@@ -133,7 +133,7 @@ exports.addtocart = async (req, res) => {
             'price':productAddedtocart.product.price,
             'quantity':productAddedtocart.quantity
         }
-        console.log(item)
+        // console.log(item)
         // console.log(productAddedtocart.quantity)
         // console.log(productAddedtocart.product.price)
 

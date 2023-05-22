@@ -107,7 +107,7 @@ const Data = sequelize.define("data", {
   (async () => {
     await sequelize.sync({ force: false });
     // Code here
-  })();
+  }) ();
 
 //   (async () => {
 //     await sequelize.sync({ force: true });
