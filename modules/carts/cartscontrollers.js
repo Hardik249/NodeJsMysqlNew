@@ -29,13 +29,13 @@ exports.carts = async (req, res) => {
 
         // const addtocart = await Cart.findAll({ include: [{model: Product, as: 'products'}] });
         /*const [addtocart, metadata] = await sequelize.query(
-          "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`user_id`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`product_id` = `products`.`id`"
+          "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`userId`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`product_id` = `products`.`id`"
         );*/
         const addtocart = await Cart.findAll({ include: Product });
         // const addtocart = await Cart.findAll({ include: Product,
         //     where: {
-        //       user_id: {
-        //         [Op.eq]: req.params.user_id
+        //       userId: {
+        //         [Op.eq]: req.params.userId
         //       }
         //     }
         // });
@@ -69,13 +69,13 @@ exports.cartsByUser = async (req, res) => {
 
         // const addtocart = await Cart.findAll({ include: [{model: Product, as: 'products'}] });
         /*const [addtocart, metadata] = await sequelize.query(
-          "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`user_id`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`product_id` = `products`.`id`"
+          "SELECT `add_to_cart`.`id`, `add_to_cart`.`product_id`, `add_to_cart`.`userId`, `add_to_cart`.`quantity`, `add_to_cart`.`createdAt`, `add_to_cart`.`updatedAt`, `products`.`id` AS `products.id`, `products`.`title` AS `products.title`, `products`.`description` AS `products.description`, `products`.`price` AS `products.price`, `products`.`discountPercentage` AS `products.discountPercentage`, `products`.`rating` AS `products.rating`, `products`.`stock` AS `products.stock`, `products`.`brand` AS `products.brand`, `products`.`category` AS `products.category`, `products`.`thumbnail` AS `products.thumbnail`, `products`.`images0` AS `products.images0`, `products`.`images1` AS `products.images1`, `products`.`images2` AS `products.images2`, `products`.`images3` AS `products.images3`, `products`.`images4` AS `products.images4`, `products`.`images5` AS `products.images5`, `products`.`createdAt` AS `products.createdAt`, `products`.`updatedAt` AS `products.updatedAt` FROM `add_to_carts` AS `add_to_cart` LEFT OUTER JOIN `products` AS `products` ON `add_to_cart`.`product_id` = `products`.`id`"
         );*/
         // const addtocart = await Cart.findAll({ include: Product });
         const addtocart = await Cart.findAll({ include: Product,
             where: {
-              user_id: {
-                [Op.eq]: req.params.user_id
+              userId: {
+                [Op.eq]: req.params.userId
               }
             }
         });
@@ -102,7 +102,7 @@ exports.addtocart = async (req, res) => {
     try {
         let addtocart = await Cart.create({
             productId: req.body.productId,
-            user_id: req.body.user_id,
+            userId: req.body.userId,
             createdAt: Date.now(),
             updatedAt: null,
             quantity: req.body.quantity,
@@ -120,8 +120,8 @@ exports.addtocart = async (req, res) => {
 
         const productAddedtocart = await Cart.findOne({ include: Product,
             where: {
-              user_id: {
-                [Op.eq]: req.params.user_id
+              userId: {
+                [Op.eq]: req.params.userId
               },
               productId: {
                 [Op.eq]: req.body.productId
@@ -145,7 +145,7 @@ exports.addtocart = async (req, res) => {
         //         // }
         //     },
         //     where: {
-        //         user_id: req.params.user_id
+        //         userId: req.params.userId
         //     }
         // });
         // console.log(req.body.productId);
@@ -202,7 +202,7 @@ exports.updatequantity = async (req, res) => {
         // console.log('req.params.product_id', req.params.product_id)
         let updatequantity = await Cart.update({
             // product_id: req.body.product_id,
-            // user_id: req.body.user_id,
+            // userId: req.body.userId,
             // createdAt: Date.now(),
             // updatedAt: null,
             // createdAt: null,
@@ -269,14 +269,14 @@ exports.removefromcart = async (req, res) => {
         console.log('r', addtocart)
         // let addtocart = await Cart.findOne({}, {
         //   where: {
-        //     // user_id: req.params.user_id
+        //     // userId: req.params.userId
         //     product_id: req.params.product_id
         //   }
         // });
         // console.log('f', addtocart)
         // let addedtocart = await addtocart.destroy({
         //   where: {
-        //     // user_id: req.params.user_id
+        //     // userId: req.params.userId
         //     product_id: req.params.product_id
         //   }
         // });
