@@ -13,26 +13,74 @@ const createdb = require('../auth/createdb.js');
 //   birthday: DataTypes.DATE
 // }, { sequelize, modelName: 'user' });
 
+
 const User = sequelize.define('users', {
     // Model attributes are defined here
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      required: true,
     },
     // lastName: {
     //   type: DataTypes.STRING
     //   // allowNull defaults to true
     // },
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-      contact: DataTypes.INTEGER,
-      // createdBy: DataTypes.STRING,
-      // updatedBy: DataTypes.STRING,
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,    
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      required: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      required: true,
+    },
+    contact: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      required: true,
+    },
+      // createdBy: {
+      //   type: DataTypes.INTEGER,
+      // },
+      // updatedBy: {
+      //   type: DataTypes.INTEGER,
+      // },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      required: true,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      required: true,
+    },
   }, {
     // Other model options go here
   });
+
+// User.sync({ alter: true });
+// const User = sequelize.define('users', {
+//     // Model attributes are defined here
+//     name: {
+//       type: DataTypes.STRING,
+//       allowNull: false
+//     },
+//     // lastName: {
+//     //   type: DataTypes.STRING
+//     //   // allowNull defaults to true
+//     // },
+//       email: DataTypes.STRING,
+//       password: DataTypes.STRING,
+//       contact: DataTypes.INTEGER,
+//       // createdBy: DataTypes.STRING,
+//       // updatedBy: DataTypes.STRING,
+//       createdAt: DataTypes.DATE,
+//       updatedAt: DataTypes.DATE,
+//   }, {
+//     // Other model options go here
+//   });
 
 
 // class User extends Model {}
