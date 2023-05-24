@@ -59,6 +59,7 @@ exports.carts = async (req, res) => {
 
 exports.cartsByUser = async (req, res) => {
     try {
+        // console.log(req.params)
         // let addtocart = await Cart.findAll({});
         // let addtocart = await Cart.findAll({
         //   where: {
@@ -100,24 +101,6 @@ exports.cartsByUser = async (req, res) => {
 
 exports.addtocart = async (req, res) => {
     try {
-        let addtocart = await Cart.create({
-            productId: req.body.productId,
-            userId: req.body.userId,
-            createdAt: Date.now(),
-            updatedAt: null,
-            quantity: req.body.quantity,
-        });
-        let addedtocart = await addtocart.save();
-
-        // let productAddtocart = await Product.findOne({
-        //   where: {
-        //     // authorId: 2
-        //     // id: req.params.id
-        //     id: req.body.productId
-        //   }
-        // });
-
-
         const productAddedtocart = await Cart.findOne({ include: Product,
             where: {
               userId: {
@@ -128,11 +111,45 @@ exports.addtocart = async (req, res) => {
               }
             }
         });
+        if (productAddedtocart == null) {
+            let addtocart = await Cart.create({
+                productId: req.body.productId,
+                userId: req.body.userId,
+                createdAt: Date.now(),
+                updatedAt: null,
+                quantity: req.body.quantity,
+            });
+            let addedtocart = await addtocart.save();
 
-        let item = {
-            'price':productAddedtocart.product.price,
-            'quantity':productAddedtocart.quantity
+
+            let item = {
+                'price':productAddedtocart.product.price,
+                'quantity':productAddedtocart.quantity
+            }
+
+            res.status(200).json({
+                status : "success post addtocart try",
+                message : "Test post api addtocart try",
+                data: productAddedtocart, item,
+            });
+
+        } else {
+            res.status(200).json({
+                status : "success post addtocart try",
+                message : "product already added to cart",
+                // data: productAddedtocart, item,
+                data: productAddedtocart
+            });
         }
+        // let productAddtocart = await Product.findOne({
+        //   where: {
+        //     // authorId: 2
+        //     // id: req.params.id
+        //     id: req.body.productId
+        //   }
+        // });
+
+
         // console.log(item)
         // console.log(productAddedtocart.quantity)
         // console.log(productAddedtocart.product.price)
@@ -181,16 +198,12 @@ exports.addtocart = async (req, res) => {
         // console.log(addedtocart)
 
         // console.log(productAddedtocart)
-        res.status(200).json({
-            status : "success post addtocart try",
-            message : "Test post api addtocart try",
-            data: productAddedtocart, item,
-        });
     } catch (error) {
+        let errors = error.errors ? error.errors : error;
         res.status(200).json({
             status : "fail post addtocart catch",
             message : "Test post api addtocart catch",
-            data: error.errors,
+            data: errors,
             // data: error.errors.map((item)=>item.message),
         });
     }
