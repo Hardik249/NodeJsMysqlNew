@@ -68,3 +68,27 @@ exports.registerValidation = async (req, res, next) => {
 	}
 
 }
+
+
+exports.loginValidation = async (req, res, next) => {
+		// console.log('login loginValidation')
+	const joiSchema = Joi.object({
+		email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+		password: Joi.string().required(),
+	})
+
+	try {
+	    // const value = await schema.validateAsync({ username: 'abc', birth_year: 1994 });
+	    const value = await joiSchema.validateAsync(req.body);
+		next();
+	    // const value = await schema.validateAsync({req.body});
+	}
+	catch (error) {
+		return res.status(200).json({
+			status: 'login Validation Fail',
+			// message: error,
+			message: `login Validation error: ${error.details.map(x => x.message).join(', ')}`,
+		});
+	}
+
+}

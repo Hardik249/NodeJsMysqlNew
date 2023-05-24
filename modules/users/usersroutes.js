@@ -8,6 +8,6 @@ const usersValidation = require('../services/usersValidation.js');
 // usersroutes.get('/users', userscontrollers);
 usersroutes.get('/users', userscontrollers.users);
 usersroutes.post('/register', [usersValidation.registerValidation], userscontrollers.register);
-usersroutes.post('/login', userscontrollers.login);
+usersroutes.post('/login', [usersValidation.loginValidation], userscontrollers.login);
 
 module.exports = usersroutes;
