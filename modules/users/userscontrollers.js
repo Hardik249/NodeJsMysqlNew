@@ -26,23 +26,38 @@ exports.register = async (req, res) => {
         const myPlaintextPassword = req.body.password;
         // const someOtherPlaintextPassword = 'not_bacon';
         let hashPass = await bcrypt.hash(myPlaintextPassword, saltRounds);
-        let user = await User.create({
-            // firstName: req.body.firstName,
-            // lastName: req.body.lastName,
-            name: req.body.name,
-            email: req.body.email,
-            password: hashPass,
-            contact: req.body.contact,
-            createdAt: Date.now(),
-            updatedAt: ''
-            // updatedAt: null
-            // updatedAt: Date.now()
-        });
-        res.status(200).json({
-            status : "success users",
-            message : "Test api users register try",
-            data: user, myPlaintextPassword
-        });
+        let user = await User.findOne({
+            where: {
+                email:req.body.email
+            }
+        })
+        let email = user ? user.email : '';
+        // console.log(email === req.body.email)
+        if (email === req.body.email) {
+            res.status(200).json({
+                status : "register Validation Fail",
+                message : "Email already in use",
+                // data: user, myPlaintextPassword
+            });
+        } else {
+            let user = await User.create({
+                // firstName: req.body.firstName,
+                // lastName: req.body.lastName,
+                name: req.body.name,
+                email: req.body.email,
+                password: hashPass,
+                contact: req.body.contact,
+                createdAt: Date.now(),
+                updatedAt: ''
+                // updatedAt: null
+                // updatedAt: Date.now()
+            });
+            res.status(200).json({
+                status : "success users",
+                message : "Test api users register try",
+                data: user, myPlaintextPassword
+            });
+        }
     } catch (error) {
         console.error(error);
         let errors = error.errors ? error.errors.map((item)=>item.message) : error;
@@ -77,7 +92,7 @@ exports.login = async (req, res) => {
             });
         } else {
             res.status(200).json({
-                "status" : "success users",
+                "status" : "fail users login",
                 "message" : "user not found",
                 // data: user
             });

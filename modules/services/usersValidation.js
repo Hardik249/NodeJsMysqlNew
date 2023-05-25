@@ -1,6 +1,6 @@
 console.log('uservalidation')
 const Joi = require('joi');
-
+const repo = require('../models/users.js')
 exports.registerValidation = async (req, res, next) => {
 // console.log(req)
 
@@ -15,8 +15,12 @@ exports.registerValidation = async (req, res, next) => {
 	        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
 	        .required(),
 
-	    repeat_password: Joi.ref('password'),
+	    // repeat_password: Joi.ref('password'),
 	        // .required(),
+
+	    password_confirmation: Joi.any()
+			.valid(Joi.ref('password'))
+			.required(),
 
 	    // access_token: [
 	    //     Joi.string(),
@@ -59,11 +63,16 @@ exports.registerValidation = async (req, res, next) => {
 		next();
 	    // const value = await schema.validateAsync({req.body});
 	}
-	catch (error) { 
+	catch (error) {
+		// console.error(error.details)
+		// console.error(`register Validation error: ${error.details.map(x => x.path).join(', ')}`)
 		return res.status(200).json({
 			status: 'register Validation Fail',
 			// message: error
-			message: `Validation error: ${error.details.map(x => x.message).join(', ')}`
+			// message: `Validation error: ${error.details.map(x => x.message).join(', ')}`,
+			message: error.details.map(x => x.message).join(', '),
+			path: error.details.map(x => x.path).join(', '),
+			// path: `register Validation error: ${error.details.map(x => x.path).join(', ')}`,
 		});
 	}
 
@@ -84,10 +93,15 @@ exports.loginValidation = async (req, res, next) => {
 	    // const value = await schema.validateAsync({req.body});
 	}
 	catch (error) {
+		// console.error(error.details)
+		// console.error(`login Validation error: ${error.details.map(x => x.path).join(', ')}`)
 		return res.status(200).json({
 			status: 'login Validation Fail',
 			// message: error,
-			message: `login Validation error: ${error.details.map(x => x.message).join(', ')}`,
+			// message: `login Validation error: ${error.details.map(x => x.message).join(', ')}`,
+			message: error.details.map(x => x.message).join(', '),
+			path: error.details.map(x => x.path).join(', '),
+			// path: `login Validation error: ${error.details.map(x => x.path).join(', ')}`,
 		});
 	}
 
