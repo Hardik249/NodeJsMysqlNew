@@ -7,8 +7,8 @@ const userscontrollers = express();
 const User = require('../models/users.js');
 // userscontrollers.get('/users', (req, res) => {
 //     res.status(200).json({
-//         "status" : "success users",
-//         "message" : "Test api users"
+//         status : "success users",
+//         message : "Test api users"
 //     });
 // });
 
@@ -17,8 +17,8 @@ jwtKey = 'jwt';
 
 exports.users = (req, res) => {
     res.status(200).json({
-        "status" : "success users",
-        "message" : "Test api users"
+        status : "success users",
+        message : "Test api users"
     });
 };
 
@@ -34,9 +34,31 @@ exports.register = async (req, res) => {
                 email:req.body.email
             }
         })
+        // let users = await User.findAll({});
+        let users = await User.findAll({
+            attributes: ['email']
+        });
+
+        // const users = await User.findAll({where: {
+        //     email: req.body.email
+        // }})
+        // console.log(users)
+        // console.log(JSON.stringify(users))
+        let userEmails = JSON.parse(JSON.stringify(users));
+        let emails = new Array();
+        userEmails.forEach(function(key, value) {
+            // console.log(key.email);
+            if (key.email != req.body.email) {
+                emails.push(key.email);
+            }
+        })
+        // console.log(userEmails.find((element)=>element))
+        // console.log(emails.keys())
+        // console.log(emails.includes(req.body.email))
+        // console.log(emails.includes('m+2@v.com'))
         let email = user ? user.email : '';
         // console.log(email === req.body.email)
-        if (email === req.body.email) {
+        if (emails.includes(req.body.email)) {
             res.status(200).json({
                 status : "register Validation Fail",
                 message : "Email already in use",
@@ -106,8 +128,8 @@ exports.login = async (req, res) => {
             })
         } else {
             res.status(200).json({
-                "status" : "fail users login",
-                "message" : "user not found",
+                status : "fail users login",
+                message : "user not found",
                 // data: user
             });
         }
@@ -121,5 +143,77 @@ exports.login = async (req, res) => {
     }
 };
 
+
+exports.getProfile = async (req, res) => {
+    try {
+        let user = await User.findOne({
+            where: {
+                id:req.params.id
+            }
+        })
+        res.status(200).json({
+            status : "success users getProfile",
+            message : "Test api users getProfile",
+            data: user
+        });
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail users getProfile",
+            message : "Test api users getProfile catch",
+            data: error
+        });
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    try {
+        let user = await User.findOne({
+            where: {
+                id:req.params.id
+            }
+        });
+        let users = await User.findAll({
+            attributes: ['email']
+        });
+        let userEmails = JSON.parse(JSON.stringify(users));
+        let emails = new Array();
+        userEmails.forEach(function(key, value) {
+            // console.log(key.email);
+            if (key.email != req.body.email) {
+                emails.push(key.email);
+            }
+        })
+        let email = user ? user.email : '';
+        // console.log(email === req.body.email)
+        if (emails.includes(req.body.email)) {
+            res.status(200).json({
+                status : "register Validation Fail",
+                message : "Email already in use",
+                path: "email"
+                // data: user, myPlaintextPassword
+            });
+        } else {
+            let updateUser = await user.update({
+                // name: "Ada"
+                name: req.body.name,
+                email: req.body.email,
+            });
+            let updatedUser = await updateUser.save();
+            res.status(200).json({
+                status : "success users updateProfile",
+                message : "Test api users updateProfile",
+                data: updatedUser
+            });
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail users updateProfile",
+            message : "Test api users updateProfile catch",
+            data: error
+        });
+    }
+};
 
 // module.exports = userscontrollers;
