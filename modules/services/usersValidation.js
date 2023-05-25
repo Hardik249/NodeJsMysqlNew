@@ -7,12 +7,14 @@ exports.registerValidation = async (req, res, next) => {
 	const schema = Joi.object({
 	    name: Joi.string()
 	        .alphanum()
-	        .min(3)
-	        .max(30)
+	        // .min(3)
+	        .max(255)
+	        .messages({ "string.max": '"name" must max to 255 chars long' })
 	        .required(),
 
 	    password: Joi.string()
-	        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+	        .pattern(new RegExp('^[a-zA-Z0-9]{1,255}$'))
+	        .messages({ "string.pattern.base": '"password" must match pattern: /^[a-zA-Z0-9][1,255]$/' })
 	        .required(),
 
 	    // repeat_password: Joi.ref('password'),
@@ -40,6 +42,7 @@ exports.registerValidation = async (req, res, next) => {
 	        // .min(10)
 	        // .max(10)
 	        .length(10)
+	        .messages({ "string.length": '"contact" must be 10 characters long' })
 	    	.required(),
 	})
 	    // .with('username', 'birth_year')

@@ -12,6 +12,9 @@ const User = require('../models/users.js');
 //     });
 // });
 
+const jwt = require('jsonwebtoken');
+jwtKey = 'jwt';
+
 exports.users = (req, res) => {
     res.status(200).json({
         "status" : "success users",
@@ -37,6 +40,7 @@ exports.register = async (req, res) => {
             res.status(200).json({
                 status : "register Validation Fail",
                 message : "Email already in use",
+                path: "email"
                 // data: user, myPlaintextPassword
             });
         } else {
@@ -85,11 +89,21 @@ exports.login = async (req, res) => {
         // let hashPass = await bcrypt.compareSync(myPlaintextPassword, user.password);
         // console.log(hashPass)
         if (hashPass) {
-            res.status(200).json({
-                "status" : "success users",
-                "message" : "Test api users login try",
-                data: user
-            });
+            const jwtToken = await jwt.sign({user}, jwtKey, {expiresIn: "12h"}, (error, token) => {
+                if(error) {
+                  return res.status(400).json({
+                    status: 'jwt Login Fail',
+                    message: "JWT Token not generated"
+                  });
+                } else {
+                  // res.status(201).json({token})
+                  return res.status(200).json({
+                    status: 'jwt Login Succeed!',
+                    message: 'Here you found your jwt Login Token',
+                    data: user, auth: token
+                  })
+                }
+            })
         } else {
             res.status(200).json({
                 "status" : "fail users login",
