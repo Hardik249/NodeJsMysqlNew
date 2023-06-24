@@ -37,7 +37,21 @@ exports.orderDetails = async (req, res) => {
 exports.orderDetailsByUser = async (req, res) => {
     try {
         const orderDetailsList = await orderDetails.findAll({ 
-            include: [Product, Order, User],
+            // include: [Product, Order, User],
+            // include:[{
+            //     model: User, Order, Product,
+            //     include: [userAddress]
+            // }],
+            include: [{
+              model: User,
+              include: [userAddress]
+            },
+            {
+              model: Order,
+            },
+            {
+              model: Product,
+            }],
             where: {
               userId: {
                 [Op.eq]: req.params.userId
@@ -70,6 +84,61 @@ exports.orderDetailsByUser = async (req, res) => {
     }
 };
 
+
+
+exports.orderDetailsByOrder = async (req, res) => {
+    try {
+        const orderDetailsList = await orderDetails.findAll({
+            // include: [Product, Order, User],
+            // include:[{
+            //     model: User, Order, Product,
+            //     include: [userAddress]
+            // }],
+            include: [
+                {
+                  model: User,
+                  // include: [userAddress],
+                },
+                {
+                  model: Order,
+                },
+                {
+                  model: Product,
+                }
+            ],
+            where: {
+              orderId: {
+                [Op.eq]: req.params.orderId
+              }
+            },
+            // group: ['orderDetails.id'], // Group by the primary key of orderDetails
+        });
+        // console.log(JSON.stringify(orderDetailsList, null, 2));
+        // console.log(orderDetailsList.length);
+
+
+        if (orderDetailsList != null) {
+            res.status(200).json({
+                status : "success orderDetails",
+                message : "Test api orderDetail by orderId",
+                data: orderDetailsList
+            });
+        } else {
+            res.status(200).json({
+                status : "success orderDetails",
+                message : "no orderDetails found for entered Order",
+                // data: userAddress
+            });
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail orderDetails",
+            message : "Test api orderDetails list by user",
+            data: error
+        });
+    }
+};
 
 
 exports.addorderDetails = async (req, res) => {
@@ -106,32 +175,32 @@ exports.addorderDetails = async (req, res) => {
                 });
             }
         }
-        let orderDetail = await orderDetails.findOne({
-            where: value
+        const orderDetailsData = await orderDetails.bulkCreate(value);
+        return res.status(200).json({
+            status : "success orderDetails addorderDetails",
+            message : "Test api orderDetails added",
+            data: orderDetailsData
         });
         // console.log(totalPriceArr);
         // let totalPrice = req.body.quantity * req.body.price;
         // console.log('v', value);
         // console.log('o', orderDetail);
-        if (orderDetail == null) {
-            const orderDetailsData = await orderDetails.bulkCreate(value);
-            res.status(200).json({
-                status : "success orderDetails addorderDetails",
-                message : "Test api orderDetails added",
-                data: orderDetailsData
-            });
-        } else {
-            res.status(200).json({
-                status : "success orderDetails addorderDetails",
-                message : "orderDetails already added",
-                data: orderDetail
-            });
-        }
+        let orderDetail = await orderDetails.findOne({
+            where: value
+        });
+        // if (orderDetail == null) {
+        // } else {
+            // return res.status(200).json({
+            //     status : "success orderDetails addorderDetails",
+            //     message : "orderDetails already added",
+            //     data: orderDetail
+            // });
+        // }
     } catch (error) {
         console.error(error)
         // console.error(error.errors)
         // console.error(error.errors.map((error)=>error.message))
-        res.status(200).json({
+        return res.status(200).json({
             status : "fail post addorderDetails catch",
             message : "Test post api addorderDetails catch",
             // data: error.errors.map((error)=>error.message),

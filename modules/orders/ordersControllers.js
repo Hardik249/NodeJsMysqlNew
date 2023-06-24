@@ -35,10 +35,77 @@ exports.orders = async (req, res) => {
 
 exports.ordersByUser = async (req, res) => {
     try {
-        const orders = await Order.findAll({ include: User,
+        const orders = await Order.findAll({
+            // include: User,
+            // include: [{
+            //   model: User,
+            //   include: [userAddress]
+            // }],
+            // {
+            //   model: Order,
+            // },
+            // {
+            //   model: Product,
+            // }],
             where: {
-              userId: {
-                [Op.eq]: req.params.userId
+                userId: {
+                    [Op.eq]: req.params.userId
+                },
+            },
+            // order: 'id'
+            // order: 'id desc'
+            // order: 'order.id DESC'
+            // order: 'id DESC'
+            // order: [
+            //   ['id', 'DESC'],
+            // ],
+            order: [['id', 'DESC']],
+        });
+        // console.log(JSON.stringify(orders, null, 2));
+        // console.log(orders.length)
+
+
+        if (orders.length != 0) {
+            res.status(200).json({
+                status : "success orders",
+                message : "Test api orders list by user",
+                data: orders
+            });
+        } else {
+            res.status(200).json({
+                status : "success orders",
+                message : "no orders found for entered user",
+                // data: userAddress
+            });
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail orders",
+            message : "Test api address list by user",
+            data: error
+        });
+    }
+};
+
+
+exports.ordersById = async (req, res) => {
+    try {
+        const orders = await Order.findOne({
+            // include: User,
+            // include: [{
+            //   model: User,
+            //   include: [userAddress]
+            // }],
+            // {
+            //   model: Order,
+            // },
+            // {
+            //   model: Product,
+            // }],
+            where: {
+              id: {
+                [Op.eq]: req.params.id
               }
             }
         });

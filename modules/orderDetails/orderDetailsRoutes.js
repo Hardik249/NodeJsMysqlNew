@@ -8,5 +8,6 @@ const orderDetailsValidation = require('../services/orderDetailsValidation.js');
 orderDetailsRoutes.get('/orderDetailsList', orderDetailsControllers.orderDetails);
 orderDetailsRoutes.get('/orderDetailsList/:userId', orderDetailsControllers.orderDetailsByUser);
 orderDetailsRoutes.post('/addorderDetails/:userId', [orderDetailsValidation.orderDetailsValidation], orderDetailsControllers.addorderDetails);
+orderDetailsRoutes.get('/orderDetail/:orderId', orderDetailsControllers.orderDetailsByOrder);
 
 module.exports = orderDetailsRoutes;

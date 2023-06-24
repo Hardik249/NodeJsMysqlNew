@@ -11,6 +11,7 @@ const Address = require('../models/address.js');
 const User = require('../models/users.js');
 const Cart = require('../models/carts.js');
 const Product = require('../models/products.js');
+const Order = require('../models/orders.js');
 
 exports.userAddress = async (req, res) => {
     try {
@@ -75,6 +76,45 @@ exports.userAddressByUser = async (req, res) => {
 };
 
 
+exports.addressByUser = async (req, res) => {
+    try {
+        const userAddress = await Address.findOne({
+            // include: User,
+            include: Order,
+            where: {
+              id: {
+                [Op.eq]: req.params.id
+              }
+            }
+        });
+        // console.log(JSON.stringify(userAddress, null, 2));
+        // console.log(userAddress.length);
+        if (userAddress != null) {
+            res.status(200).json({
+                status : "success userAddress address",
+                message : "Test api address",
+                data: userAddress
+            });
+        } else {
+            res.status(200).json({
+                status : "success userAddress address",
+                message : "no address found",
+                // message : "no address found for entered id of order",
+                // data: userAddress
+            });
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail userAddress address",
+            message : "Test api address by user",
+            data: error
+        });
+    }
+};
+
+
+
 exports.addtouseraddress = async (req, res) => {
     try {
         let userAddressData = {
@@ -90,10 +130,15 @@ exports.addtouseraddress = async (req, res) => {
         });
         if (userAddresses == null) {
             const userAddress = await Address.create(userAddressData);
+            let userAddressList = await Address.findAll({
+                where:{
+                    userId: req.params.userId
+                }
+            })
             res.status(200).json({
                 status : "success user address added",
                 message : "address added successfully",
-                data: userAddress
+                data: userAddress, userAddressList
             });
         } else {
             res.status(200).json({
