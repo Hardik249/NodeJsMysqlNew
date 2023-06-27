@@ -65,6 +65,12 @@ const Order = sequelize.define('orders', {
 User.hasOne(Order);
 Order.belongsTo(User);
 
+
+Order.belongsTo(userAddress, { foreignKey: 'addressId' });
+userAddress.hasMany(Order, { foreignKey: 'addressId' });
+
+
+
 // Product.hasOne(Order);
 // Order.belongsTo(Product);
 

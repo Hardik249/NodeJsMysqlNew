@@ -14,19 +14,19 @@ exports.userAddressValidation = async (req, res, next) => {
 	        .messages({ "string.max": '"address" must max to 255 chars long' })
 	        .required(),
 	    country: Joi.string()
-	        .alphanum()
+	        // .alphanum()
 	        // .min(3)
 	        .max(255)
 	        .messages({ "string.max": '"country" must max to 255 chars long' })
 	        .required(),
 	    state: Joi.string()
-	        .alphanum()
+	        // .alphanum()
 	        // .min(3)
 	        .max(255)
 	        .messages({ "string.max": '"state" must max to 255 chars long' })
 	        .required(),
 	    city: Joi.string()
-	        .alphanum()
+	        // .alphanum()
 	        // .min(3)
 	        .max(255)
 	        .messages({ "string.max": '"address" must max to 255 chars long' })

@@ -104,32 +104,43 @@ exports.login = async (req, res) => {
                 email: req.body.email
             }
         })
+        let password = user ? user.password : '';
         // console.log(user)
         // console.log(user.password)
         // let hashPass = await bcrypt.hash(myPlaintextPassword, saltRounds);
-        let hashPass = await bcrypt.compare(myPlaintextPassword, user.password);
-        // let hashPass = await bcrypt.compareSync(myPlaintextPassword, user.password);
-        // console.log(hashPass)
-        if (hashPass) {
-            const jwtToken = await jwt.sign({user}, jwtKey, {expiresIn: "12h"}, (error, token) => {
-                if(error) {
-                  return res.status(400).json({
-                    status: 'jwt Login Fail',
-                    message: "JWT Token not generated"
-                  });
-                } else {
-                  // res.status(201).json({token})
-                  return res.status(200).json({
-                    status: 'jwt Login Succeed!',
-                    message: 'Here you found your jwt Login Token',
-                    data: user, auth: token
-                  })
-                }
-            })
+        if (user) {
+            let hashPass = await bcrypt.compare(myPlaintextPassword, password);
+            // let hashPass = await bcrypt.compareSync(myPlaintextPassword, user.password);
+            // console.log(hashPass)
+            if (hashPass) {
+                const jwtToken = await jwt.sign({user}, jwtKey, {expiresIn: "12h"}, (error, token) => {
+                    if(error) {
+                      return res.status(400).json({
+                        status: 'jwt Login Fail',
+                        message: "JWT Token not generated"
+                      });
+                    } else {
+                      // res.status(201).json({token})
+                      return res.status(200).json({
+                        status: 'jwt Login Succeed!',
+                        message: 'Here you found your jwt Login Token',
+                        data: user, auth: token
+                      })
+                    }
+                })
+            } else {
+                res.status(200).json({
+                    status : "login Validation Fail",
+                    message : "password not match",
+                    path: "password",
+                    // data: user
+                });
+            }
         } else {
             res.status(200).json({
-                status : "fail users login",
+                status : "login Validation Fail",
                 message : "user not found",
+                path: "email",
                 // data: user
             });
         }

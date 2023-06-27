@@ -58,7 +58,7 @@ const User = sequelize.define('users', {
     },
   }, {
     // Other model options go here
-  });
+});
 
 // User.sync({ alter: true });
 // const User = sequelize.define('users', {
