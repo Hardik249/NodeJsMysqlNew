@@ -1,7 +1,7 @@
 console.log('ordersController');
 const express = require('express');
 const ordersController = express();
-const { Op } = require("sequelize");
+const { Op, literal } = require("sequelize");
 const con = require('../auth/conn.js');
 const Sequelize = con.Sequelize;
 const sequelize = con.sequelize;
@@ -135,6 +135,68 @@ exports.ordersById = async (req, res) => {
     }
 };
 
+
+exports.ordersByMonth = async (req, res) => {
+    try {
+
+        console.log(req.params);
+        const orders = await Order.findAll({
+            // include: User,
+            // include: [{
+            //   model: User,
+            //   include: [userAddress]
+            // }],
+            // {
+            //   model: Order,
+            // },
+            // {
+            //   model: Product,
+            // }],
+            where: {
+              // id: {
+              //   [Op.eq]: req.params.id
+              // }
+              userId: {
+                [Op.eq]: req.params.userId
+              }
+            }
+        });
+
+        // Build the query
+        const filteredData = await Order.findAll({
+            where: literal(`MONTH(createdAt) = ${req.params.month}`),
+            order: [['id', 'DESC']],
+        });
+
+
+        // return res.status(200).json({
+        //     status : "success orders",
+        //     message : "Test api orders list by user",
+        //     data: filteredData
+        // });
+
+        if (filteredData.length != 0) {
+            return res.status(200).json({
+                status : "success orders",
+                message : "Test api orders list by user",
+                data: filteredData
+            });
+        } else {
+            return res.status(200).json({
+                status : "success orders",
+                message : "no orders found for selected month.",
+                // data: userAddress
+            });
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(200).json({
+            status : "fail orders",
+            message : "Test api address list by user",
+            data: error
+        });
+    }
+};
 
 
 

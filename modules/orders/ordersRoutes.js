@@ -9,5 +9,6 @@ ordersRoutes.get('/ordersList', ordersControllers.orders);
 ordersRoutes.get('/ordersList/:userId', ordersControllers.ordersByUser);
 ordersRoutes.post('/addorder/:userId', [ordersValidation.ordersValidation], ordersControllers.addorder);
 ordersRoutes.get('/ordersList/:id', ordersControllers.ordersById);
+ordersRoutes.get('/ordersListByMonth/:userId/:month', ordersControllers.ordersByMonth);
 
 module.exports = ordersRoutes;
