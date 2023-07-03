@@ -13,6 +13,15 @@ const User = require('../models/users.js');
 const Cart = require('../models/carts.js');
 const Product = require('../models/products.js');
 
+const { generateOrder } = require('../razorpay.js');
+// const { generateOrder } = require('../../../modules/razorpay');
+
+const Razorpay = require('razorpay');
+let razorpay = new Razorpay({
+  key_id: 'rzp_test_5aZFGfnkoKs3KA',
+  key_secret: 'tu4NbZWXguqHLq37j5bBbWZ8',
+});
+
 exports.orders = async (req, res) => {
     try {
         const orders = await Order.findAll({ include: User });
@@ -229,3 +238,46 @@ exports.addorder = async (req, res) => {
 };
 
 
+
+exports.payUsingRazorpay = async (req, res) => {
+  const amount = req.body.amount;
+  const currency = req.body.currency;
+
+  const options = {
+    amount: amount,
+    currency: currency,
+    receipt: 'order_receipt', // Unique identifier for the order
+    // Add more options as needed
+  };
+
+  try {
+    console.log(options);
+    const order = await razorpay.orders.create(options);
+    res.json({
+      order_id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      key: 'rzp_test_5aZFGfnkoKs3KA', // Return the key for the client-side
+    });
+  } catch (error) {
+    console.log(error);
+    // res.status(500).json({ error: 'Failed to create order' });
+    // res.status(400).json({ error: error });
+    res.status(400).json(error);
+  }
+  // const amount = `Your random payment amount`
+  // const order = await generateOrder(
+  //   amount,
+  //   'rzp_test_5aZFGfnkoKs3KA',
+  // )
+  // res.status(200).send(order)
+}
+
+// router.post('/', async (req,res)=>{
+//   const amount = `Your random payment amount`
+//   const order = await generateOrder(
+//     amount,
+//     process.env.RAZORPAY_DEFAULT_CURRENCY,
+//   )
+//   res.status(200).send(order)
+// })
