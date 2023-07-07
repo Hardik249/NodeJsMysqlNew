@@ -154,12 +154,16 @@ exports.addorderDetails = async (req, res) => {
         // console.log(req.params);
         // console.log(req.body);
         // let totalPriceArr = [];
+        // let productStockArr = [];
+        // let quantityArr = [];
+        // let ProductArr = [];
         let value = [];
         let totalPrice;
         let totalAmount = 0;
         if (req.body.quantity.length == req.body.price.length) {
             for (var i = 0; i < req.body.quantity.length; i++) {
                 totalPrice = req.body.quantity[i] * req.body.price[i];
+                // quantityArr.push(req.body.quantity[i]);
                 // totalPriceArr.push(req.body.quantity[i] * req.body.price[i]);
                 totalAmount += totalPrice;
                 value.push({
@@ -173,6 +177,26 @@ exports.addorderDetails = async (req, res) => {
                     orderId: req.body.orderId,
                     userId: req.params.userId,
                 });
+                let product = await Product.findOne({
+                    where: {
+                        id: req.body.productId[i]
+                    }
+                })
+                // ProductArr.push(product);
+                // console.log('o', product.stock);
+                let updatedStock = product.stock - req.body.quantity[i];
+                // console.log('u', updatedStock);
+                let newStockProduct = await product.update({
+                    stock: updatedStock,
+                    where: {
+                        id: req.body.productId[i]
+                    }
+                });
+                let updatedStockProduct = await newStockProduct.save();
+                // console.log(ProductArr);
+                // console.log(quantityArr);
+                // console.log(obj);
+                // let updateStok = product.stock - req.body.quantity[i]
             }
         }
         const orderDetailsData = await orderDetails.bulkCreate(value);
