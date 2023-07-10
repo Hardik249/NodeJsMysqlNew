@@ -9,6 +9,7 @@ const wishes = require('./wishes/wishesRoutes.js');
 const userAddress = require('./userAddress/userAddressRoutes.js');
 const orders = require('./orders/ordersRoutes.js');
 const orderDetails = require('./orderDetails/orderDetailsRoutes.js');
+const Reviews = require('./reviews/reviewsRoutes.js');
 
 routes.use('/users', users);
 routes.use('/products', products);
@@ -17,5 +18,6 @@ routes.use('/wishes', wishes);
 routes.use('/userAddress', userAddress);
 routes.use('/orders', orders);
 routes.use('/orderDetails', orderDetails);
+routes.use('/reviews', Reviews);
 
 module.exports = routes;

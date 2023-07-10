@@ -4,8 +4,9 @@ const app = express();
 
 const { body, validationResult } = require('express-validator');
 const bodyparser = require('body-parser');
-const cors = require('cors')
-
+const cors = require('cors');
+const multer = require('multer');
+const upload = multer();
 const api = require('./modules/routes');
 
 
@@ -14,6 +15,12 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
+// app.use(bodyparser);
+// for parsing multipart/form-data
+app.use(upload.array());
+app.use(express.static('public'));
+
 
 app.get('/testapi', (req, res) => {
     res.status(200).json({
