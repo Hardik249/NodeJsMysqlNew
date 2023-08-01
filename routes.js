@@ -18,7 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // app.use(bodyparser);
 // for parsing multipart/form-data
-app.use(upload.array());
+// console.log(upload.array());
+// app.use(multer())
+// app.use(upload.array());
 app.use(express.static('public'));
 
 

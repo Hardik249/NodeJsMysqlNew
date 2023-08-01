@@ -3,6 +3,8 @@ const reviewsControllers = express();
 const { Op } = require("sequelize");
 const multer = require("multer");
 const Reviews = require('../models/reviews.js');
+const Product = require('../models/products.js');
+const User = require('../models/users.js');
 
 
 exports.reviewsListAll = async (req, res) => {
@@ -25,31 +27,12 @@ exports.reviewsListAll = async (req, res) => {
 
 exports.addreview = async (req, res) => {
     try {
-    	console.log(req.user);
-    	// console.log(req.body);
-    	// console.log(req.params);
-    	//Setting storage engine
-		const storageEngine = multer.diskStorage({
-		  destination: "./images",
-		  filename: (req, file, cb) => {
-		    cb(null, `${Date.now()}--${file.originalname}`);
-		  },
-		});
-		// console.log(storageEngine);
-		//initializing multer
-		const upload = multer({
-		  storage: storageEngine,
-		  // limits: { fileSize: 1000000 },
-		});
-		// console.log(upload);
-		// console.log(req.file);
     	let reviewsDataObj = {
     		productId:req.params.productId,
     		userId:req.user.id,
     		review:req.body.review,
-    		status:req.body.status,
-    		// image: upload,
-    		image:req.file ? req.file.originalname : '', 
+			status:req.body.status ? req.body.status : 'unapproved',
+			image: req.files[0].filename,
     		created_by:req.user.id,
     		updated_by:req.user.id,
     		// createdAt:
@@ -61,10 +44,11 @@ exports.addreview = async (req, res) => {
         return res.status(200).json({
             status : "success Reviews",
             message : "Test api Reviews success",
+            // data: reviewsDataObj
             data: reviewsData
         });
     } catch (error) {
-        console.error(error);
+        console.error('error', error);
         return res.status(200).json({
             status : "fail Reviews",
             message : "Test api Reviews fail",
@@ -75,8 +59,8 @@ exports.addreview = async (req, res) => {
 
 exports.reviewsList = async (req, res) => {
     try {
-    	// const { page } = req.query;
     	console.log(req.query ? req.query.page : 1);
+		// const { page } = req.query;
     	const page = req.query ? req.query.page : 1;
 		const limit = 5;
 		const skip = page ? (page - 1) * limit : 0;
@@ -90,15 +74,36 @@ exports.reviewsList = async (req, res) => {
         // 	// offset: 5,
         // 	offset: parseInt(req.query.skip, 0) || 0,
         // });
+        let reviewsData = await Reviews.findAll({
+			where: {
+				status: 'approved',
+				productId: req.params.productId
+				}
+        });
         let reviews = await Reviews.findAll({
 	      limit,
 	      offset: skip,
+	      include: User,
+			where: {
+				status: 'approved',
+				productId: req.params.productId
+			}
 	    });
-        return res.status(200).json({
-            status : "success Reviews",
-            message : "Test api Reviews success",
-            data: reviews
-        });
+	    if (reviews.length != 0) {
+	        return res.status(200).json({
+	            status : "success Reviews",
+	            message : "here are Reviews",
+	            data: reviews,
+	            total: reviewsData.length,
+	            limit: limit
+	        });
+	    } else {
+			return res.status(200).json({
+	            status : "success Reviews",
+	            message : "there is no Reviews",
+	            // data: reviews
+	        });
+	    }
     } catch (error) {
         console.error(error);
         return res.status(200).json({

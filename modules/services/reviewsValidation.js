@@ -27,11 +27,11 @@ exports.reviewsValidation = async (req, res, next) => {
 	    //     .messages({ "string.max": '"image" must max to 255 chars long' })
 	    //     .required(),
 	})
-
+// _parsedOriginalUrl
 	// schema.validate(req.body);
-
+// console.log(req.files);
 	// schema.validate({});
-
+// console.log(await schema.validateAsync(req.body));
 	try {
 	    // const value = await schema.validateAsync({ username: 'abc', birth_year: 1994 });
 	    const value = await schema.validateAsync(req.body);
@@ -39,6 +39,8 @@ exports.reviewsValidation = async (req, res, next) => {
 	    // const value = await schema.validateAsync({req.body});
 	}
 	catch (error) {
+		// console.error(error)
+		// console.error('eo', error._original)
 		// console.error(error.details)
 		// console.error(`register Validation error: ${error.details.map(x => x.path).join(', ')}`)
 		return res.status(200).json({
